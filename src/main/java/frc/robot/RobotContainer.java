@@ -9,6 +9,8 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.BasicAuto;
 import frc.robot.commands.Drive;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.LiftArm;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,6 +27,9 @@ public class RobotContainer {
   private Drivetrain drivetrain = new Drivetrain();
   private CommandXboxController controller = new CommandXboxController(0);
   private Drive drive = new Drive(drivetrain, controller);
+  private Arm arm = new Arm();
+  private Trigger armUpButton  = controller.x();
+  private Trigger armDownButton = controller.y();
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
@@ -48,6 +53,10 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+    armUpButton.whileTrue(new LiftArm(arm, 0.5));
+    armDownButton.whileTrue(new LiftArm(arm, -0.5));
+
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
